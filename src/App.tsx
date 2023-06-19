@@ -1,36 +1,39 @@
 import React, { useState } from 'react'
 import { invoke } from '@tauri-apps/api/tauri'
-import './App.css'
+import { Button, Input, ConfigProvider } from 'antd'
+import reactLogo from '@/assets/react.svg'
 
 function App() {
   const [greetMsg, setGreetMsg] = useState('')
   const [name, setName] = useState('')
 
-  async function greet() {
+  const greet = async () => {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     setGreetMsg(await invoke('greet', { name }))
   }
 
   return (
-    <div className="container bg-black p-6">
-      <div className="p-6">Welcome to Tauri!</div>
-      <form
-        className="row"
-        onSubmit={e => {
-          e.preventDefault()
-          greet()
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={e => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#00b96b'
+        }
+      }}
+    >
+      <div className="bg-[#7f8f9f] flex justify-center flex-col gap-6">
+        <img src={reactLogo} alt="" className="w-[50px]" />
+        <div className="p-6">Welcome to Tauri!</div>
+        <Input
+          onChange={e => {
+            setName(e.target.value)
+          }}
         />
-        <button type="submit">Greet</button>
-      </form>
-
-      <p>{greetMsg}</p>
-    </div>
+        <Button className="h-[30px]" type="primary" onClick={greet}>
+          提交
+        </Button>
+        <p>{greetMsg}</p>
+      </div>
+    </ConfigProvider>
   )
 }
 
